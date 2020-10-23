@@ -1,7 +1,6 @@
-import { checkPropTypes } from 'prop-types'
 import React, { Component } from 'react'
-//Obtiene datos de los inputs
 
+//Etiqueta htmlFor (única para react)
 const Perrito = () => (
   <span role='img' aria-label='perrito'>
     🐶
@@ -9,49 +8,56 @@ const Perrito = () => (
 )
 
 class InputNoControlado extends Component {
-  nombre = React.createRef()
-  email = React.createRef()
-
-  handleClick = () => {
-    const nombre = this.nombre.current.value //Se extrae la info.
-    const email = this.email.current.value
+  handleSubmit = (event) => {
+    event.preventDefault() //Evita la recarga de la página
+    const nombre = event.target[0].value //Target hace referencia al formulario y sus índices
+    const email = event.target[1].value
 
     //MAnejo de datos
-    this.props.onSend({nombre,email})
+    this.props.onSend({ nombre, email })
   }
 
-  render(){
-    return(
-      <div>
-        <input
-        type="text"
-        ref={this.nombre}
-        placeholder='Nombre'
-        />
-        <input
-        type="text"
-        ref={this.email}
-        placeholder='Email'
-        />
-        <button onClick={this.handleClick}>
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <p>
+          <label htmlFor='name'>Nombre:</label>
+          <input
+            type="text"
+            placeholder='Nombre'
+            id='name'
+          />
+        </p>
+        <p>
+          <label htmlFor='email'>Email:</label>
+          <input
+            type="text"
+            placeholder='Email'
+            id='email'
+          />
+        </p>
+
+        <button>
           Enviar
         </button>
-      </div>
+      </form>
     )
   }
 }
 
 class App extends Component {
-  
+
   send = (data) => {
     console.log(data)
   }
-  
+
   render() {
     return (
       <div>
-        <h1>Evidencia TiposSO y AWS <Perrito /></h1>
-        <InputNoControlado 
+        <h1>
+          Atributo ref <Perrito />
+        </h1>
+        <InputNoControlado
           onSend={this.send}
         />
       </div>
