@@ -1,60 +1,59 @@
+import { checkPropTypes } from 'prop-types'
 import React, { Component } from 'react'
-//Buscador utilizando funciones async-await
+//Obtiene datos de los inputs
+
+const Perrito = () => (
+  <span role='img' aria-label='perrito'>
+    🐶
+  </span>
+)
+
+class InputNoControlado extends Component {
+  nombre = React.createRef()
+  email = React.createRef()
+
+  handleClick = () => {
+    const nombre = this.nombre.current.value //Se extrae la info.
+    const email = this.email.current.value
+
+    //MAnejo de datos
+    this.props.onSend({nombre,email})
+  }
+
+  render(){
+    return(
+      <div>
+        <input
+        type="text"
+        ref={this.nombre}
+        placeholder='Nombre'
+        />
+        <input
+        type="text"
+        ref={this.email}
+        placeholder='Email'
+        />
+        <button onClick={this.handleClick}>
+          Enviar
+        </button>
+      </div>
+    )
+  }
+}
 
 class App extends Component {
-  state = {
-    movie: {},
-    isLoading: false
+  
+  send = (data) => {
+    console.log(data)
   }
-
-  handleSubmit = async (event) => {
-    event.preventDefault()
-
-    this.setState({ isFetching: true })
-
-    const title = event.target[0].value
-    const url = 'http://www.omdbapi.com/?i=tt3896198&apikey=b284100a'
-
-    const res = await fetch(url + '&t=' + title)
-    const movie = await res.json() 
-      
-    this.setState({
-      movie,
-      isFetching: false
-    })
-  }
-
+  
   render() {
-    const { movie, isFetching } = this.state
     return (
       <div>
-        <form onSubmit={this.handleSubmit}>
-          <input
-            type="text"
-            placeholder='Nombre de película'
-          />
-          <button>
-            Buscar
-          </button>
-        </form>
-        { isFetching && (
-          <h2>Cargando...</h2>
-        )}
-        { movie.Title && !isFetching && (
-          <div>
-            <h1>{movie.Title}</h1>
-            <p>
-              {movie.Plot}
-            </p>
-            <img
-              src={movie.Poster}
-              alt='Poster'
-              style={{
-                width: '150px'
-              }}
-            />
-          </div>
-        )}
+        <h1>Evidencia TiposSO y AWS <Perrito /></h1>
+        <InputNoControlado 
+          onSend={this.send}
+        />
       </div>
     )
   }
