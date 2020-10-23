@@ -55,7 +55,7 @@ class App extends Component {
     return (
       <div>
         <h1>
-          Atributo ref <Perrito />
+          Evidencia para TiposSO (AWS) <Perrito />
         </h1>
         <InputNoControlado
           onSend={this.send}
