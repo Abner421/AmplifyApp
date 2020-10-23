@@ -1,25 +1,63 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
+//Buscador utilizando funciones async-await
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  state = {
+    movie: {},
+    isLoading: false
+  }
+
+  handleSubmit = async (event) => {
+    event.preventDefault()
+
+    this.setState({ isFetching: true })
+
+    const title = event.target[0].value
+    const url = 'http://www.omdbapi.com/?i=tt3896198&apikey=b284100a'
+
+    const res = await fetch(url + '&t=' + title)
+    const movie = await res.json() 
+      
+    this.setState({
+      movie,
+      isFetching: false
+    })
+  }
+
+  render() {
+    const { movie, isFetching } = this.state
+    return (
+      <div>
+        <form onSubmit={this.handleSubmit}>
+          <input
+            type="text"
+            placeholder='Nombre de película'
+          />
+          <button>
+            Buscar
+          </button>
+        </form>
+        { isFetching && (
+          <h2>Cargando...</h2>
+        )}
+        { movie.Title && !isFetching && (
+          <div>
+            <h1>{movie.Title}</h1>
+            <p>
+              {movie.Plot}
+            </p>
+            <img
+              src={movie.Poster}
+              alt='Poster'
+              style={{
+                width: '150px'
+              }}
+            />
+          </div>
+        )}
+      </div>
+    )
+  }
 }
 
-export default App;
+export default App
